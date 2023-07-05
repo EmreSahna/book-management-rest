@@ -5,7 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-var db *gorm.DB
+var dbForBook *gorm.DB
 
 type Book struct {
 	gorm.Model
@@ -16,30 +16,30 @@ type Book struct {
 
 func init() {
 	config.Connect()
-	db = config.GetDB()
-	db.AutoMigrate(&Book{})
+	dbForBook = config.GetDB()
+	dbForBook.AutoMigrate(&Book{})
 }
 
 func (b *Book) CreateBook() *Book {
-	db.NewRecord(b)
-	db.Create(&b)
+	dbForBook.NewRecord(b)
+	dbForBook.Create(&b)
 	return b
 }
 
 func GetAllBooks() []Book {
 	var Books []Book
-	db.Find(&Books)
+	dbForBook.Find(&Books)
 	return Books
 }
 
 func GetBookById(Id int64) (*Book, *gorm.DB) {
 	var getBook Book
-	db := db.Where("ID=?", Id).Find(&getBook)
+	db := dbForBook.Where("ID=?", Id).Find(&getBook)
 	return &getBook, db
 }
 
 func DeleteBook(ID int64) Book {
 	var book Book
-	db.Where("ID=?", ID).Delete(book)
+	dbForBook.Where("ID=?", ID).Delete(book)
 	return book
 }
