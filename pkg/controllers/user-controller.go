@@ -14,7 +14,7 @@ func GetUserByUsernameAndPassword(w http.ResponseWriter, r *http.Request) {
 	utils.ParseBody(r, user)
 	foundUser, _ := models.GetUserByUsernameAndPassword(user.Username, user.Password)
 	res, _ := json.Marshal(foundUser)
-	w.Header().Set("Content-Type", "pkglication/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
