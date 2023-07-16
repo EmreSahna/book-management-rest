@@ -10,6 +10,7 @@ import (
 
 func main() {
 	r := mux.NewRouter()
+	r.Use(middleware.LoggingMiddleware)
 	routes.RegisterBookStoreRoutes(r)
 	routes.RegisterUserRoutes(r)
 	http.Handle("/", r)
