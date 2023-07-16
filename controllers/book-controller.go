@@ -3,8 +3,8 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/EmreSahna/go_mysql_book_management/pkg/models"
-	"github.com/EmreSahna/go_mysql_book_management/pkg/utils"
+	"github.com/EmreSahna/go_mysql_book_management/models"
+	"github.com/EmreSahna/go_mysql_book_management/utils"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"

@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/EmreSahna/go_mysql_book_management/pkg/models"
-	"github.com/EmreSahna/go_mysql_book_management/pkg/utils"
+	"github.com/EmreSahna/go_mysql_book_management/models"
+	"github.com/EmreSahna/go_mysql_book_management/utils"
 	"net/http"
 )
 

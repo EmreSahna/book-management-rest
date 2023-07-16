@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/EmreSahna/go_mysql_book_management/pkg/routes"
+	"github.com/EmreSahna/go_mysql_book_management/middleware"
+	routes "github.com/EmreSahna/go_mysql_book_management/routes"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
