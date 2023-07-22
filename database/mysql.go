@@ -19,6 +19,7 @@ func Connect() error {
 
 	db.AutoMigrate(&models.User{})
 	db.AutoMigrate(&models.Book{})
+	db.AutoMigrate(&models.Author{})
 
 	return nil
 }

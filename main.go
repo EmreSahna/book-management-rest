@@ -30,8 +30,8 @@ func main() {
 
 	r := mux.NewRouter()
 	r.Use(middleware.LoggingMiddleware)
-	routes.RegisterBookStoreRoutes(r)
+	routes.RegisterBookRoutes(r)
+	routes.RegisterAuthorRoutes(r)
 	routes.RegisterUserRoutes(r)
-	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
