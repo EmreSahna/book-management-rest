@@ -11,6 +11,24 @@ import (
 	"strconv"
 )
 
+type BookCreateRequest struct {
+	Title       string  `json:"title"`
+	AuthorId    int     `json:"author_id"`
+	ISBN        string  `json:"isbn"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	Quantity    int     `json:"quantity"`
+}
+
+type BookResponse struct {
+	Title       string         `json:"title"`
+	Author      AuthorResponse `json:"author"`
+	ISBN        string         `json:"isbn"`
+	Description string         `json:"description"`
+	Price       float64        `json:"price"`
+	Quantity    int            `json:"quantity"`
+}
+
 func GetBooks(w http.ResponseWriter, r *http.Request) {
 	dbForBook := database.GetDB()
 	var Books []models.Book
@@ -34,20 +52,47 @@ func GetBookById(w http.ResponseWriter, r *http.Request) {
 	var getBook models.Book
 	dbForBook.Where("ID=?", ID).Find(&getBook)
 
-	res, _ := json.Marshal(getBook)
+	var getAuthor models.Author
+	dbForBook.Where("ID=?", getBook.AuthorId).Find(&getAuthor)
+
+	var bookResponse = BookResponse{
+		Title: getBook.Title,
+		Author: AuthorResponse{
+			FirstName: getAuthor.FirstName,
+			LastName:  getAuthor.LastName,
+		},
+		ISBN:        getBook.ISBN,
+		Description: getBook.Description,
+		Price:       getBook.Price,
+		Quantity:    getBook.Quantity,
+	}
+
+	res, _ := json.Marshal(bookResponse)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
 
 func CreateBook(w http.ResponseWriter, r *http.Request) {
-	var b models.Book
-	err := utils.ParseBody(r, &b)
+	var request BookCreateRequest
+	err := utils.ParseBody(r, &request)
 	if err != nil {
 		fmt.Println("error while parsing")
 	}
 
 	dbForBook := database.GetDB()
+	var a models.Author
+	dbForBook.First(&a, request.AuthorId)
+
+	var b = models.Book{
+		Title:       request.Title,
+		AuthorId:    a.ID,
+		ISBN:        request.ISBN,
+		Description: request.Description,
+		Price:       request.Price,
+		Quantity:    request.Quantity,
+	}
+
 	dbForBook.Create(&b)
 
 	res, _ := json.Marshal(b)
@@ -88,15 +133,6 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	var bookDetails models.Book
 	db := dbForBook.Where("ID=?", ID).Find(&bookDetails)
 
-	if updateBook.Name != "" {
-		bookDetails.Name = updateBook.Name
-	}
-	if updateBook.Author != "" {
-		bookDetails.Author = updateBook.Author
-	}
-	if updateBook.Publication != "" {
-		bookDetails.Publication = updateBook.Publication
-	}
 	db.Save(&bookDetails)
 	res, _ := json.Marshal(bookDetails)
 	w.Header().Set("Content-Type", "application/json")

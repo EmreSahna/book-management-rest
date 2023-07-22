@@ -1,8 +1,13 @@
 package models
 
+import "github.com/jinzhu/gorm"
+
 type Book struct {
-	Id          int    `json:"id" gorm:"primary_key"`
-	Name        string `json:"name"`
-	Author      string `json:"author"`
-	Publication string `json:"publication"`
+	gorm.Model
+	Title       string  `json:"title"`
+	AuthorId    uint    `json:"author_id"`
+	ISBN        string  `json:"isbn"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	Quantity    int     `json:"quantity"`
 }
