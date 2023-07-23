@@ -2,20 +2,24 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/EmreSahna/go_mysql_book_management/database"
 	"github.com/EmreSahna/go_mysql_book_management/models"
 	"github.com/EmreSahna/go_mysql_book_management/utils"
 	"net/http"
 )
 
-type FindUserDTO struct {
+type FindUserRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
 func GetUserByUsernameAndPassword(w http.ResponseWriter, r *http.Request) {
-	var request FindUserDTO
-	utils.ParseBody(r, request)
+	var request FindUserRequest
+	err := utils.ParseBody(r, &request)
+	if err != nil {
+		fmt.Println("error while parsing")
+	}
 
 	dbForUser := database.GetDB()
 	var user models.User
