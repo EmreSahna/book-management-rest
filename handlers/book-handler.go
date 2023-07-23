@@ -30,7 +30,12 @@ type BookResponse struct {
 }
 
 func GetBooks(w http.ResponseWriter, r *http.Request) {
+	authorId := r.URL.Query().Get("authorId")
 	dbForBook := database.GetDB()
+	if authorId != "" {
+		dbForBook = dbForBook.Where("author_id=?", authorId)
+	}
+
 	var Books []models.Book
 	dbForBook.Find(&Books)
 
