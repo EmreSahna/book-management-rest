@@ -4,7 +4,11 @@ import (
 	"fmt"
 	"github.com/EmreSahna/go_mysql_book_management/config"
 	"github.com/EmreSahna/go_mysql_book_management/database"
+	"github.com/EmreSahna/go_mysql_book_management/middleware"
+	"github.com/EmreSahna/go_mysql_book_management/routes"
+	"github.com/gorilla/mux"
 	"log"
+	"net/http"
 	"os"
 )
 
@@ -26,6 +30,10 @@ func main() {
 		}
 	}()
 
-	server := NewServer(fmt.Sprintf(":%s", os.Getenv("PORT")))
-	server.Run()
+	r := mux.NewRouter()
+	r.Use(middleware.LoggingMiddleware)
+	routes.RegisterBookRoutes(r)
+	routes.RegisterAuthorRoutes(r)
+	routes.RegisterUserRoutes(r)
+	http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("PORT")), r)
 }
